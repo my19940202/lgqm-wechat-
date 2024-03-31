@@ -4,7 +4,7 @@ const app = express();
 const path = require('path');
 app.use(express.json());
 const {PORT = 8800} = process.env;
-const {sendInitiativeMsg, resLlmMsg} = require('./util');
+const {sendInitiativeMsg, resLlmMsg, isHitKeyworkd} = require('./util');
 
 // 设置模板引擎
 app.set('view engine', 'ejs');
@@ -16,11 +16,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post('/', async (req, res) => {
     const appid = req.headers['x-wx-from-appid'] || '';
     const {ToUserName, FromUserName, MsgType, CreateTime, Content, Event} = req.body;
-    const condition = Event === 'subscribe';
     if (MsgType === 'text') {
         // 命中原平台关键词回复的策略，不走大模型
-        if (condition) {
-            console.log('aaa');
+        const isHit = isHitKeyworkd(Content, Event);
+        if (isHit) {
+            res.send('success');
         }
         else {
             const result = await resLlmMsg(Content);

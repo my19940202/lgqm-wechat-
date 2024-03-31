@@ -3,6 +3,7 @@
 const request = require('request');
 const API = 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/3pyn7rz4zmzdffp7/?access_token=';
 const {AK, SK} = process.env;
+const {keywordList} = require('./constant');
 
 function safeParseJSON(str) {
     try {
@@ -125,11 +126,16 @@ function sendInitiativeMsg(appid = 'wx1432d9c9b2205448', mess) {
     })
 }
 
+function isHitKeyworkd(content, event) {
+    return event === 'subscribe' || keywordList.some(word => content.includes(word));
+}
+
 module.exports = {
     baiduBot,
     safeParseJSON,
     resDefMsg4s,
     resLlmMsg,
-    sendInitiativeMsg
+    sendInitiativeMsg,
+    isHitKeyworkd
 }
 
