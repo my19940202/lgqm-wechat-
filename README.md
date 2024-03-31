@@ -9,7 +9,6 @@
 ## ❌ 支持文章自动化生成
 需要想下如何把文章自动化生成，搞起来
 
-
 ## 启动办法
 ```
 docker run -p 8800:8800 -it -v /Users/xishengbo/Desktop/dev.tmp/git_repo/lgqm-wechat-ghz:/app dockette/nodejs:v18 sh

@@ -10,9 +10,37 @@
 <body class="bg-black">
     <main>
         <div class="container">
-            <h1>自动化生成每日临高宇宙新闻</h1>
+            <h1>自动化生成每日澳宋新闻</h1>
+            <div class="input">
+                <textarea>请输入新闻主题和内容提纲，点击提交后AI自动化生成</textarea>
+                <button>点击生成AI澳宋新闻</button>
+            </div>
+            <div class="output">
+                <textarea></textarea>
+            </div>
+            <h1>生成记录历史</h1>
+            <ul class="history-article">
+                <li>啦啦啦啦</li>
+            </ul>
         </div>
     </main>
+    <dialog class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title">标题</div></div>
+            <div class="modal-body">
+                啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>
+                啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>
+                啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>啦啦啦啦<br/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="ok-btn"><span>确 定</span></button>
+            </div>
+        </div>
+    </dialog>
 </body>
+<script type="text/javascript">
+    var rows = <%- JSON.stringify(rows) %>;
+    var fileds = <%- JSON.stringify(fields) %>;
+</script>
 <script src="/js/article.js"></script>
 </html>
