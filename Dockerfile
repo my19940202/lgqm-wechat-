@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . ./
 
-CMD [ "node", "index.initiative.js"]
+CMD [ "node", "index.js"]

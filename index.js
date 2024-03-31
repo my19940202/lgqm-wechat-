@@ -1,53 +1,35 @@
-// 被动回复
+// 临高启明微信公众号采用主动回复, 调用大模型回复用户问答
 const express = require('express');
 const app = express();
+const path = require('path');
 app.use(express.json());
-
 const {PORT = 8800} = process.env;
-const {resDefMsg4s, resLlmMsg} = require('./util');
-let cacheResultMap = {};
+const {sendInitiativeMsg, resLlmMsg} = require('./util');
 
+// 设置模板引擎
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+// 设置静态文件
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 消息回复
 app.post('/', async (req, res) => {
-    console.log('/消息推送', req.body);
-    res.send('success');
-});
-
-app.get('/cache', (req, res) => {
-    res.json(cacheResultMap);
-});
-
-app.all('/chat', async (req, res) => {
     const appid = req.headers['x-wx-from-appid'] || '';
-    console.log(appid, '/chat消息推送', req.body)
-    let {ToUserName, FromUserName, MsgType, CreateTime, Content} = req.body;
-    Content = Content.trim();
+    const {ToUserName, FromUserName, MsgType, CreateTime, Content, Event} = req.body;
+    const condition = Event === 'subscribe';
     if (MsgType === 'text') {
-        const msgData = {
-            ToUserName: FromUserName,
-            FromUserName: ToUserName,
-            CreateTime: CreateTime,
-            MsgType: 'text'
-        };
-
-        // 命中消息缓存 直接缓存消息回复
-        if (Content === '1') {
-            res.send({
-                ...msgData,
-                Content: cacheResultMap[ToUserName] || '小书虫没找到答案，请稍后再重试'
-            });
+        // 命中原平台关键词回复的策略，不走大模型
+        if (condition) {
+            console.log('aaa');
         }
         else {
-            // 微信公众号需要5秒nei回复，暂时先采用race方式
-            // 如果大模型5秒内回复，正常交互
-            // 如果超过5秒，使用回复1进行交互得到答案
-            const result = await Promise.race([
-                resLlmMsg(Content, ToUserName, cacheResultMap),
-                resDefMsg4s(msgData)
-            ]);
-            res.send({
-                ...msgData,
-                Content: result
+            const result = await resLlmMsg(Content);
+            await sendInitiativeMsg(appid, {
+                touser: FromUserName,
+                msgtype: 'text',
+                text: {content: result}
             });
+            res.send('success');
         }
     }
     else {
@@ -61,6 +43,11 @@ app.all('/chat', async (req, res) => {
     }
 });
 
+// 选择页面
+app.get('/auto-make-article', (req, res) => {
+    res.render('article', {title: '自动化生成每日临高宇宙新闻'});
+});
+
 app.listen(PORT, function(){
-    console.log('passive msg service is running')
-})
+    console.log('lgqm msg service is running')
+});
