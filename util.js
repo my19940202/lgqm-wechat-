@@ -64,7 +64,7 @@ async function qianfanSdkBot(content) {
         const options = {
             method: 'POST',
             // 还是写公网地址 内网地址无法访问
-            url: 'http://qianfan-appbuilder-70138-4-1319072486.sh.run.tcloudbase.com:8800/chat',
+            url: 'http://qianfan-appbuilder-70138-4-1319072486.sh.run.tcloudbase.com/chat',
             headers: {
                 'Content-Type': 'application/json'
             },
