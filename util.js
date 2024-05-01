@@ -58,6 +58,40 @@ async function baiduBot(content) {
     }
 }
 
+async function qianfanSdkBot(content) {
+    if (content) {
+        console.time('init')
+        const options = {
+            method: 'POST',
+            url: 'http://yvsdetmx.qianfan-appbuilder.8i7w8y5q.kge32tjp.com:8800/chat',
+            // url: 'http://qianfan-appbuilder-70138-4-1319072486.sh.run.tcloudbase.com/chat',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                msg: content,
+                appid: 'f3aff6e7-9fd6-4d17-939e-d6065a133bf3'
+            })
+        };
+        return new Promise((resolve, reject) => {
+            try {
+                request(options, (error, response) => {
+                    if (error) {
+                        reject({result: '服务繁忙，稍后回复'});
+                    }
+                    else {
+                        const ret = safeParseJSON(response.body);
+                        console.log('ret', ret);
+                        ret && ret.data && resolve(ret.data);
+                    }
+                })
+            } catch (error) {
+                reject({result: '服务繁忙，稍后回复'});
+            }
+        })
+    }
+}
+
 /**
  * 使用 AK，SK 生成鉴权签名（Access Token）
  * @return string 鉴权签名信息（Access Token）
@@ -94,11 +128,11 @@ function resDefMsg4s() {
 
 function resLlmMsg(text, cacheKey, cacheMap) {
     return new Promise(async (resolve, reject) => {
-        const {result} = await baiduBot(text);
-        if (result) {
-            resolve(result);
+        const data = await qianfanSdkBot(text);
+        if (data) {
+            resolve(data);
             if (cacheKey && cacheMap) {
-                cacheMap[cacheKey] = result;
+                cacheMap[cacheKey] = data;
             }
         }
         else {
