@@ -63,8 +63,8 @@ async function qianfanSdkBot(content) {
         console.time('init')
         const options = {
             method: 'POST',
-            url: 'http://yvsdetmx.qianfan-appbuilder.8i7w8y5q.kge32tjp.com/chat',
-            // url: 'http://qianfan-appbuilder-70138-4-1319072486.sh.run.tcloudbase.com/chat',
+            // url: 'http://yvsdetmx.qianfan-appbuilder.8i7w8y5q.kge32tjp.com/chat',
+            url: 'http://qianfan-appbuilder-70138-4-1319072486.sh.run.tcloudbase.com',
             headers: {
                 'Content-Type': 'application/json'
             },
