@@ -63,7 +63,8 @@ async function qianfanSdkBot(content) {
         console.time('init')
         const options = {
             method: 'POST',
-            url: 'http://yvsdetmx.qianfan-appbuilder.8i7w8y5q.kge32tjp.com/chat',
+            // 还是写公网地址 内网地址无法访问
+            url: 'http://qianfan-appbuilder-70138-4-1319072486.sh.run.tcloudbase.com:8800/chat',
             headers: {
                 'Content-Type': 'application/json'
             },
