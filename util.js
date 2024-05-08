@@ -19,9 +19,7 @@ function safeParseJSON(str) {
 
 async function baiduBot(content) {
     if (content) {
-        console.time('init')
         const access_token = await getAccessToken();
-        console.timeEnd('init');
         const options = {
             method: 'POST',
             url: API + access_token,
@@ -60,7 +58,7 @@ async function baiduBot(content) {
 
 async function qianfanSdkBot(content) {
     if (content) {
-        console.time('init')
+        console.time('qianfansdk')
         const options = {
             method: 'POST',
             // 还是写公网地址 内网地址无法访问
@@ -83,6 +81,7 @@ async function qianfanSdkBot(content) {
                         const ret = safeParseJSON(response.body);
                         console.log('ret', ret);
                         ret && ret.data && resolve(ret.data);
+                        console.timeEnd('qianfansdk')
                     }
                 })
             } catch (error) {
@@ -118,11 +117,11 @@ function getAccessToken() {
     })
 }
 
-function resDefMsg4s() {
+function resDefMsg(second) {
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve('小书虫思考中🤔, 请5秒后发送1查看回复');
-        }, 4000);
+            resolve('服务器太火爆了🤔, 请10秒后再提提问试试');
+        }, second * 1000);
     });
 }
 
@@ -143,6 +142,7 @@ function resLlmMsg(text, cacheKey, cacheMap) {
 
 // 使用主动回复 发送回复消息
 function sendInitiativeMsg(appid = 'wx1432d9c9b2205448', mess) {
+    console.log('mess', mess);
     return new Promise((resolve, reject) => {
         request({
             method: 'POST',
@@ -167,7 +167,7 @@ function isHitKeyworkd(content, event) {
 module.exports = {
     baiduBot,
     safeParseJSON,
-    resDefMsg4s,
+    resDefMsg,
     resLlmMsg,
     sendInitiativeMsg,
     isHitKeyworkd
